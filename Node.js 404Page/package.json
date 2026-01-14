@@ -1,0 +1,17 @@
+{
+  "name":"nodejs-404-page",
+  "version":"1.0.0",
+  "description": "A simple Node.js Express app with static pages and a custom 404 error page",
+  "main":"app.js",
+  "type":"commonjs",
+  "scripts":{
+    "start":"node app.js",
+    "dev":"nodemon app.js"
+  },
+  "author":"Muhammad Raheel",
+  
+  "dependencies": {
+    "express": "^5.2.1",
+    "nodemon": "^3.1.11"
+  }
+}
