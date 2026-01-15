@@ -1,0 +1,17 @@
+*{
+    padding:0;
+    margin:0
+}
+h1{
+    color:gold;
+}
+a{
+    text-decoration:none;
+    border:2px solid white;
+    background-color: black;
+    color:white;
+}
+a:hover{
+    background-color:white;
+    color:black; 
+}
