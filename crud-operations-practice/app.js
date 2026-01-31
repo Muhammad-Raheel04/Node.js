@@ -28,6 +28,18 @@ app.post('/create', async (req, res) => {
         res.status(500).send("Error creating student");
     }
 });
+app.get('/students',async(req,res)=>{
+    try{
+        const db=await connectDB();
+        const collection=db.collection('firstCollection');
+        const data=await collection.find().toArray();
+        console.log(data);
+        res.send(data);
+    }catch(err){
+        console.error("error reading students data");
+        res.status(500).send("Error reading students");
+    }
+})
 app.listen(process.env.PORT, () => {
     console.log("Visit http://localhost:3200");
 })
