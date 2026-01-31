@@ -27,13 +27,13 @@
                 <% students.forEach(student=>{%>
                     <li>
                         <%=student.name%> | <%=student.age%> |<%=student.course%>
-                                    <a href="/edit/<%=student._id%>">Edit</a>
-                                    <a href="/delete/<%=student._id%>">Delete</a>
+                        <a href="/edit/<%=student._id%>">Edit</a>
+                        <a href="/delete/<%=student._id%>">Delete</a>
                     </li>
-                    <%})%>
-                        <%}else{%>
-                            <li>No students yet</li>
-                            <%}%>
+                <%})%>
+                <%}else{%>
+                        <li>No students yet</li>
+            <%}%>
         </ul>
     </div>
 </body>
