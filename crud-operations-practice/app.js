@@ -4,6 +4,7 @@ const path = require('path');
 const app = express();
 
 const connectDB = require('./db');
+const { ObjectId } = require('mongodb');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -16,37 +17,51 @@ app.get('/', async (req, res) => {
         const db = await connectDB();
         const collection = db.collection('firstCollection');
         const students = await collection.find().toArray();
-        res.render('form', { students ,editStudent:null});
+        res.render('form', { students, editStudent: null });
     } catch (err) {
         console.error("error reading students data");
         res.status(500).send("Error reading students");
     }
 })
 app.post('/create', async (req, res) => {
-    const { name, age, course } = req.body;
-
-    try {
-        const db = await connectDB();
-        const collection = db.collection('firstCollection');
-        const result = await collection.insertOne({
-            name,
-            age: Number(age),
-            course
-        })
-        console.log(result);
-        res.send(`student created with id ${result.insertedId}`);
-    } catch (err) {
-        console.log(err);
-        res.status(500).send("Error creating student");
+    const { id, name, age, course } = req.body;
+    const db = await connectDB();
+    const collection = db.collection('firstCollection');
+    if (id) {
+        await collection.updateOne(
+            { _id: new ObjectId(id) },
+            {
+                $set: {
+                    name, age: Number(age), course
+                }
+            }
+        )
+    } else {
+        await collection.insertOne({ name, age: Number(age), course });
     }
+
+    res.redirect('/');
 });
-app.get('/students', async (req, res) => {
+app.get('/delete/:id', async (req, res) => {
     try {
         const db = await connectDB();
         const collection = db.collection('firstCollection');
-        const students = await collection.find().toArray();
-        console.log(students);
-        res.render('student', { students });
+        const students = await collection.deleteOne({ _id: new ObjectId(req.params.id) });
+    } catch (err) {
+        console.error("error reading students data");
+        res.status(500).send("Error reading students");
+    }
+    res.redirect('/');
+})
+app.get('/edit/:id', async (req, res) => {
+    try {
+        const db = await connectDB();
+        const collection = db.collection('firstCollection');
+        const students=await collection.find().toArray();
+        const editStudent=await collection.findOne(
+            {_id:new ObjectId(req.params.id)}
+        )
+        res.render('form',{students,editStudent})
     } catch (err) {
         console.error("error reading students data");
         res.status(500).send("Error reading students");
