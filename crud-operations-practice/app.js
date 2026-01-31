@@ -7,6 +7,9 @@ const connectDB = require('./db');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.set('view engine','ejs');
+app.set('views',path.join(__dirname,'pages'));
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'pages', 'form.html'));
 })
@@ -18,7 +21,7 @@ app.post('/create', async (req, res) => {
         const collection = db.collection('firstCollection');
         const result = await collection.insertOne({
             name,
-            age,
+            age:Number(age),
             course
         })
         console.log(result);
@@ -32,9 +35,9 @@ app.get('/students',async(req,res)=>{
     try{
         const db=await connectDB();
         const collection=db.collection('firstCollection');
-        const data=await collection.find().toArray();
-        console.log(data);
-        res.send(data);
+        const students=await collection.find().toArray();
+        console.log(students);
+        res.render('student',{students});
     }catch(err){
         console.error("error reading students data");
         res.status(500).send("Error reading students");
